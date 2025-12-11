@@ -32,8 +32,14 @@ print(ttl)
 ttl = 0
 with open('data/day6.txt', 'r') as file:
     data = file.read()
+
+# data = "123 328  51 64 \n 45 64  387 23 \n  6 98  215 314\n*   +   *   +  "
 data = data.split('\n')
-ops = data[-1]
+ops = [
+        n.replace(' ', '')
+        for n in data[-1].split(' ')
+        if n != ''
+    ]
 data = data[:-1]
 
 j = 0
@@ -62,4 +68,4 @@ for i in range(len(ops)):
         j += 1
     if nums:
         ttl += op(nums)
-print(ttl) # 329632715776 < x < 11327104040927165
+print(ttl)
