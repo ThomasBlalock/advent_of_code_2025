@@ -1,0 +1,46 @@
+#%%
+data = '1061119-1154492,3-23,5180469-5306947,21571-38630,1054-2693,141-277,2818561476-2818661701,21177468-21246892,40-114,782642-950030,376322779-376410708,9936250-10074071,761705028-761825622,77648376-77727819,2954-10213,49589608-49781516,9797966713-9797988709,4353854-4515174,3794829-3861584,7709002-7854055,7877419320-7877566799,953065-1022091,104188-122245,25-39,125490-144195,931903328-931946237,341512-578341,262197-334859,39518-96428,653264-676258,304-842,167882-252124,11748-19561'
+data = data.split(',')
+data = [list(map(int, x.split('-'))) for x in data]
+
+# Puzzle 1
+ttl = 0
+for r in data:
+    for i in range(r[0], r[1]+1):
+        i_str = str(i)
+        switch = True
+
+        mid = len(i_str)//2
+        if len(i_str)%2==1:
+            continue
+        for j in range(mid):
+            if i_str[j]!=i_str[mid+j]:
+                switch=False
+                break
+
+        if switch:
+            ttl += i
+print(ttl)
+
+# Puzzle 2
+ttl = 0
+for r in data:
+    for i in range(r[0], r[1]+1):
+        i_str = str(i)
+        for d in range(2, len(i_str)+1):
+            switch = True
+            sep_dist = len(i_str)//d
+            if len(i_str)%d!=0:
+                continue
+            for j in range(sep_dist):
+                for k in range(1, d):
+                    if i_str[j]!=i_str[j+sep_dist*k]:
+                        switch=False
+                        break
+                if not switch:
+                    break
+            if switch:
+                ttl += i
+                break
+
+print(ttl)
