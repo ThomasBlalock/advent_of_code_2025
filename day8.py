@@ -16,32 +16,39 @@ for i in range(len(data)-1):
         t = (dist, i, j)
         heapq.heappush(heap, t)
 
-class Node:
-    def __init__(self):
-        self.connected = []
-graph = [Node() for _ in range(len(data))]
+clusters = [i for i in range(len(data))]
 for _ in range(1000):
     dist, i, j = heapq.heappop(heap)
-    graph[i].connected.append(j)
-    graph[j].connected.append(i)
-
-visited = set()
-circuits = []
-for i in range(len(graph)):
-    if i in visited:
+    ci = clusters[i]
+    cj = clusters[j]
+    if ci == cj:
         continue
-    stack = [i]
-    circuit = set()
-    while stack:
-        node = stack.pop()
-        if node in visited:
-            continue
-        visited.add(node)
-        circuit.add(node)
-        for neighbor in graph[node].connected:
-            if neighbor not in visited:
-                stack.append(neighbor)
-    circuits.append(circuit)
+    c = min(ci, cj)
+    for k in range(len(clusters)):
+        if clusters[k] == ci or clusters[k] == cj:
+            clusters[k] = c
 
-circuit_sizes = sorted([len(circuit) for circuit in circuits], reverse=True)
-print(circuit_sizes[0]*circuit_sizes[1]*circuit_sizes[2])
+cluster_sizes = {}
+for i in range(len(clusters)):
+    c = clusters[i]
+    if c not in cluster_sizes:
+        cluster_sizes[c] = 0
+    cluster_sizes[c] += 1
+
+cluster_sizes = sorted(cluster_sizes.items(), key=lambda x: x[1], reverse=True)
+print(cluster_sizes[0][1]*cluster_sizes[1][1]*cluster_sizes[2][1])
+
+
+# Puzzle 2
+while sum(clusters) > 0:
+    dist, i, j = heapq.heappop(heap)
+    ci = clusters[i]
+    cj = clusters[j]
+    if ci == cj:
+        continue
+    c = min(ci, cj)
+    for k in range(len(clusters)):
+        if clusters[k] == ci or clusters[k] == cj:
+            clusters[k] = c
+
+print(int(data[i].split(',')[0]) * int(data[j].split(',')[0]))
